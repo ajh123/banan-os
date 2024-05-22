@@ -8,6 +8,7 @@ set(USERSPACE_PROJECTS
 	chmod
 	cp
 	dd
+	desktop
 	dhcp-client
 	echo
 	getopt
