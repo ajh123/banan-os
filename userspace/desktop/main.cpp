@@ -100,13 +100,25 @@ int main(int argc, char** argv)
 
 
 	// Rendering
-	Window* mainWindow = new Window(50, 50, 300, 200, BAN::StringView("Main Window"), 0xCCCCCC); // Light gray color
+	memset(fb_mmap, 0x000000, fb_bytes);
+	msync(fb_mmap, fb_bytes, MS_SYNC);
+
+	Window* mainWindow = new Window(50, 50, 300, 200, BAN::StringView("Main Window"), 0xFFFFFF);
 
     Label* label1 = new Label(10, 10, 100, 20, BAN::StringView("Label 1"), 0xFF0000); // Red color
-    Button* button1 = new Button(10, 40, 80, 30, BAN::StringView("Button 1"), 0x0000FF); // Blue color
+    Button* button1 = new Button(10, 40, 60, 20, BAN::StringView("Button 1"), 0x0000FF, 0xFFFFFF); // Blue BG color
 
     mainWindow->addElement(label1);
     mainWindow->addElement(button1);
 
-    mainWindow->draw();
+
+	while (true)
+	{
+		draw_rectangle(0, 0, fb_info.width, fb_info.height, 0x008080);
+		mainWindow->draw();
+		msync(fb_mmap, fb_bytes, MS_SYNC);
+	}
+
+
+	return 0;
 }

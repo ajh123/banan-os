@@ -9,13 +9,13 @@
 // Base class for all GUI elements
 class GUIElement {
 protected:
-    int x, y, width, height;
+    uint32_t x, y, width, height;
     GUIElement* parent;
 
     // Calculate absolute position based on parent's position
-    void get_absolute_position(int& abs_x, int& abs_y) {
+    void get_absolute_position(uint32_t& abs_x, uint32_t& abs_y) {
         if (parent) {
-            int parent_abs_x, parent_abs_y;
+            uint32_t parent_abs_x, parent_abs_y;
             parent->get_absolute_position(parent_abs_x, parent_abs_y);
             abs_x = parent_abs_x + x;
             abs_y = parent_abs_y + y;
@@ -26,7 +26,7 @@ protected:
     }
 
 public:
-    GUIElement(int x, int y, int width, int height)
+    GUIElement(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
         : x(x), y(y), width(width), height(height), parent(nullptr) {}
 
     void setParent(GUIElement* parentElement) {
@@ -43,7 +43,7 @@ private:
     BAN::String text;
     uint32_t color;
 public:
-    Label(int x, int y, int width, int height, BAN::String text, uint32_t color)
+    Label(uint32_t x, uint32_t y, uint32_t width, uint32_t height, BAN::String text, uint32_t color)
         : GUIElement(x, y, width, height), text(text), color(color) {}
 
     void setText(BAN::String newText) {
@@ -55,7 +55,7 @@ public:
     }
 
     void draw() override {
-        int abs_x, abs_y;
+        uint32_t abs_x, abs_y;
         get_absolute_position(abs_x, abs_y);
         draw_text(abs_x, abs_y, text, color);
     }
@@ -66,9 +66,10 @@ class Button : public GUIElement {
 private:
     BAN::String text;
     uint32_t color;
+    uint32_t text_color;
 public:
-    Button(int x, int y, int width, int height, BAN::String text, uint32_t color)
-        : GUIElement(x, y, width, height), text(text), color(color) {}
+    Button(uint32_t x, uint32_t y, uint32_t width, uint32_t height, BAN::String text, uint32_t color, uint32_t text_color)
+        : GUIElement(x, y, width, height), text(text), color(color), text_color(text_color) {}
 
     void setText(BAN::String newText) {
         text = newText;
@@ -79,11 +80,11 @@ public:
     }
 
     void draw() override {
-        int abs_x, abs_y;
+        uint32_t abs_x, abs_y;
         get_absolute_position(abs_x, abs_y);
         draw_rectangle(abs_x, abs_y, width, height, color);
         // Center the text within the button (for simplicity, only horizontally centered)
-        draw_text_centered(abs_x, abs_y, width, text, color);
+        draw_text_centered(abs_x, abs_y, width, text, text_color);
     }
 };
 
@@ -94,7 +95,7 @@ private:
     BAN::Vector<GUIElement*> children;
     uint32_t color;
 public:
-    Window(int x, int y, int width, int height, BAN::String title, uint32_t color)
+    Window(uint32_t x, uint32_t y, uint32_t width, uint32_t height, BAN::String title, uint32_t color)
         : GUIElement(x, y, width, height), title(title), color(color) {}
 
     void setTitle(BAN::String newTitle) {
@@ -111,7 +112,7 @@ public:
     }
 
     void draw() override {
-        int abs_x, abs_y;
+        uint32_t abs_x, abs_y;
         get_absolute_position(abs_x, abs_y);
         draw_rectangle(abs_x, abs_y, width, height, color);
         for (auto& child : children) {
