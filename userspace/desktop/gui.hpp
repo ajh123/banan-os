@@ -93,10 +93,9 @@ class Window : public GUIElement {
 private:
     BAN::String title;
     BAN::Vector<GUIElement*> children;
-    uint32_t color;
 public:
-    Window(uint32_t x, uint32_t y, uint32_t width, uint32_t height, BAN::String title, uint32_t color)
-        : GUIElement(x, y, width, height), title(title), color(color) {}
+    Window(uint32_t x, uint32_t y, uint32_t width, uint32_t height, BAN::String title)
+        : GUIElement(x, y, width, height), title(title) {}
 
     void setTitle(BAN::String newTitle) {
         title = newTitle;
@@ -114,7 +113,10 @@ public:
     void draw() override {
         uint32_t abs_x, abs_y;
         get_absolute_position(abs_x, abs_y);
-        draw_rectangle(abs_x, abs_y, width, height, color);
+        draw_rectangle(abs_x, abs_y, width, height, 0x000000);
+        draw_rectangle(abs_x + 1, abs_y + 1, width - 1 * 2, height - 1 * 2, 0xC0C0C0);
+        draw_rectangle(abs_x + 4, abs_y + 4, width - 4 * 2, height - 4 * 2, 0x000000);
+        draw_rectangle(abs_x + 5, abs_y + 5, width - 5 * 2, height - 5 * 2, 0xFFFFFF);
         for (auto& child : children) {
             child->draw();
         }

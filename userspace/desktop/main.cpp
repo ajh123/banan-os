@@ -103,7 +103,7 @@ int main(int argc, char** argv)
 	memset(fb_mmap, 0x000000, fb_bytes);
 	msync(fb_mmap, fb_bytes, MS_SYNC);
 
-	Window* mainWindow = new Window(50, 50, 300, 200, BAN::StringView("Main Window"), 0xFFFFFF);
+	Window* mainWindow = new Window(50, 50, 300, 200, BAN::StringView("Main Window"));
 
     Label* label1 = new Label(10, 10, 100, 20, BAN::StringView("Label 1"), 0xFF0000); // Red color
     Button* button1 = new Button(10, 40, 60, 20, BAN::StringView("Button 1"), 0x0000FF, 0xFFFFFF); // Blue BG color
