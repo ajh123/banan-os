@@ -100,6 +100,54 @@ void draw_line(uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1, uint32_t colo
     }
 }
 
+void draw_horizontal_line(uint32_t x, uint32_t y, uint32_t length, uint32_t color)
+{
+    // Ensure the line starts within bounds
+    if (y >= fb_info.height || x >= fb_info.width)
+        return;
+
+    // Calculate the effective length, clipping to the framebuffer bounds
+    uint32_t max_length = (x + length > fb_info.width) ? fb_info.width - x : length;
+
+    // Prepare a row of pixels to copy
+    uint32_t* row_buffer = new uint32_t[max_length];
+    for (uint32_t i = 0; i < max_length; ++i)
+    {
+        row_buffer[i] = color;
+    }
+
+    // Get the starting address in the framebuffer memory
+    uint32_t* fb_ptr = static_cast<uint32_t*>(fb_mmap);
+
+    // Calculate the offset for the starting position
+    uint32_t offset = y * fb_info.width + x;
+    // Use memcpy to copy the row buffer to the framebuffer memory
+    memcpy(fb_ptr + offset, row_buffer, max_length * sizeof(uint32_t));
+
+    // Clean up the row buffer
+    delete[] row_buffer;
+}
+
+void draw_vertical_line(uint32_t x, uint32_t y, uint32_t length, uint32_t color)
+{
+    // Ensure the line starts within bounds
+    if (x >= fb_info.width || y >= fb_info.height)
+        return;
+
+    // Calculate the effective length, clipping to the framebuffer bounds
+    uint32_t max_length = (y + length > fb_info.height) ? fb_info.height - y : length;
+
+    // Get the starting address in the framebuffer memory
+    uint32_t* fb_ptr = static_cast<uint32_t*>(fb_mmap);
+
+    // Draw the line column by column
+    for (uint32_t i = 0; i < max_length; ++i)
+    {
+        uint32_t offset = (y + i) * fb_info.width + x;
+        fb_ptr[offset] = color;
+    }
+}
+
 void cleanup()
 {
 	if (fb_mmap)

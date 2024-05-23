@@ -6,6 +6,47 @@
 #include "./drawing.hpp"
 #include "./font.hpp"
 
+void draw_window_border(uint32_t abs_x, uint32_t abs_y, uint32_t width, uint32_t height, uint32_t border_width, uint32_t edge_color, uint32_t mid_color)
+{
+    // Ensure the border width does not exceed the dimensions of the window
+    border_width = BAN::Math::min<uint32_t>(border_width, width / 2);
+    border_width = BAN::Math::min<uint32_t>(border_width, height / 2);
+
+    uint32_t outer_x = abs_x - border_width;
+    uint32_t outer_y = abs_y - border_width;
+    uint32_t outer_width = width + 2 * border_width;
+    uint32_t outer_height = height + 2 * border_width;
+
+    // Draw the edge border (first and last lines)
+    for (uint32_t i = 0; i < border_width; ++i)
+    {
+        if (i == 0 || i == border_width - 1)
+        {
+            // Draw top edge border
+            draw_horizontal_line(outer_x + i, outer_y + i, outer_width - 2 * i, edge_color);
+            // Draw bottom edge border
+            draw_horizontal_line(outer_x + i, outer_y + outer_height - i - 1, outer_width - 2 * i, edge_color);
+            // Draw left edge border
+            draw_vertical_line(outer_x + i, outer_y + i, outer_height - 2 * i, edge_color);
+            // Draw right edge border
+            draw_vertical_line(outer_x + outer_width - i - 1, outer_y + i, outer_height - 2 * i, edge_color);
+        }
+    }
+
+    // Draw the middle border
+    for (uint32_t i = 1; i < border_width - 1; ++i)
+    {
+        // Draw top middle border
+        draw_horizontal_line(outer_x + i, outer_y + i, outer_width - 2 * i, mid_color);
+        // Draw bottom middle border
+        draw_horizontal_line(outer_x + i, outer_y + outer_height - i - 1, outer_width - 2 * i, mid_color);
+        // Draw left middle border
+        draw_vertical_line(outer_x + i, outer_y + i, outer_height - 2 * i, mid_color);
+        // Draw right middle border
+        draw_vertical_line(outer_x + outer_width - i - 1, outer_y + i, outer_height - 2 * i, mid_color);
+    }
+}
+
 // Base class for all GUI elements
 class GUIElement {
 protected:
@@ -113,10 +154,11 @@ public:
     void draw() override {
         uint32_t abs_x, abs_y;
         get_absolute_position(abs_x, abs_y);
-        draw_rectangle(abs_x, abs_y, width, height, 0x000000);
-        draw_rectangle(abs_x + 1, abs_y + 1, width - 1 * 2, height - 1 * 2, 0xC0C0C0);
-        draw_rectangle(abs_x + 4, abs_y + 4, width - 4 * 2, height - 4 * 2, 0x000000);
-        draw_rectangle(abs_x + 5, abs_y + 5, width - 5 * 2, height - 5 * 2, 0xFFFFFF);
+        // Background
+        draw_rectangle(abs_x, abs_y, width, height, 0xFFFFFF);
+        // Border
+        draw_window_border(abs_x, abs_y, width, height, 4, 0x000000, 0xC0C0C0);
+
         for (auto& child : children) {
             child->draw();
         }
@@ -128,3 +170,4 @@ public:
         }
     }
 };
+
