@@ -6,6 +6,27 @@
 #include "./drawing.hpp"
 #include "./font.hpp"
 
+const uint8_t mouse_icon[16][11] =  {
+	{1,0,0,0,0,0,0,0,0,0,0},
+	{1,1,0,0,0,0,0,0,0,0,0},
+	{1,2,1,0,0,0,0,0,0,0,0},
+	{1,2,2,1,0,0,0,0,0,0,0},
+	{1,2,2,2,1,0,0,0,0,0,0},
+	{1,2,2,2,2,1,0,0,0,0,0},
+	{1,2,2,2,2,2,1,0,0,0,0},
+	{1,2,2,2,2,2,2,1,0,0,0},
+	{1,2,2,2,2,2,2,2,1,0,0},
+	{1,2,2,2,2,2,2,2,2,1,0},
+	{1,2,2,2,2,1,1,1,1,1,1},
+	{1,2,2,2,1,0,0,0,0,0,0},
+	{1,2,2,1,0,0,0,0,0,0,0},
+	{1,2,1,0,0,0,0,0,0,0,0},
+	{1,1,0,0,0,0,0,0,0,0,0},
+	{1,0,0,0,0,0,0,0,0,0,0},
+};
+
+uint32_t mouse_color_mapping[] = {0, 0xFFFFFFFF, 0};
+
 void draw_window_border(uint32_t abs_x, uint32_t abs_y, uint32_t width, uint32_t height, uint32_t border_width, uint32_t edge_color, uint32_t mid_color)
 {
     // Ensure the border width does not exceed the dimensions of the window
@@ -44,6 +65,19 @@ void draw_window_border(uint32_t abs_x, uint32_t abs_y, uint32_t width, uint32_t
         draw_vertical_line(outer_x + i, outer_y + i, outer_height - 2 * i, mid_color);
         // Draw right middle border
         draw_vertical_line(outer_x + outer_width - i - 1, outer_y + i, outer_height - 2 * i, mid_color);
+    }
+}
+
+void draw_mouse(uint32_t abs_x, uint32_t abs_y)
+{
+    for (int row = 0; row < 16; ++row) {
+        for (int col = 0; col < 11; ++col) {
+            uint8_t data = mouse_icon[row][col];
+            if (data > 0) {
+                uint32_t color = mouse_color_mapping[data];
+                put_pixel(row+abs_x, col+abs_y, color);
+            }
+        }
     }
 }
 
