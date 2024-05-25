@@ -111,36 +111,36 @@ int main(int argc, char** argv)
     mainWindow->addElement(label1);
     mainWindow->addElement(button1);
 
-	int mouse_x = fb_info.width / 2;
-	int mouse_y = fb_info.height / 2;
+	// int mouse_x = fb_info.width / 2;
+	// int mouse_y = fb_info.height / 2;
 
 	while (true)
 	{
 		// Updating
-		using namespace Kernel::Input;
+		// using namespace Kernel::Input;
 
-		MouseEvent event;
-		if (read(mouse_fd, &event, sizeof(event)) == -1)
-		{
-			fprintf(stderr, "read: ");
-			perror(mouse_path);
-			return 1;
-		}
+		// MouseEvent event;
+		// if (read(mouse_fd, &event, sizeof(event)) == -1)
+		// {
+		// 	fprintf(stderr, "read: ");
+		// 	perror(mouse_path);
+		// 	return 1;
+		// }
 
-		switch (event.type)
-		{
-			case MouseEventType::MouseMoveEvent:
-				mouse_x = BAN::Math::clamp<int>(mouse_x + event.move_event.rel_x, 0, fb_info.width);
-				mouse_y = BAN::Math::clamp<int>(mouse_y - event.move_event.rel_y, 0, fb_info.height);
-				break;
-			default:
-				break;
-		}
+		// switch (event.type)
+		// {
+		// 	case MouseEventType::MouseMoveEvent:
+		// 		mouse_x = BAN::Math::clamp<int>(mouse_x + event.move_event.rel_x, 0, fb_info.width);
+		// 		mouse_y = BAN::Math::clamp<int>(mouse_y - event.move_event.rel_y, 0, fb_info.height);
+		// 		break;
+		// 	default:
+		// 		break;
+		// }
 
 		// Drawing
 		draw_rectangle(0, 0, fb_info.width, fb_info.height, 0x008080);
 		mainWindow->draw();
-		draw_mouse(mouse_x, mouse_y);
+		// draw_mouse(mouse_x, mouse_y);
 
 		msync(fb_mmap, fb_bytes, MS_SYNC);
 	}

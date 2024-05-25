@@ -6,6 +6,8 @@
 #include "./drawing.hpp"
 #include "./font.hpp"
 
+#define TITLE_BAR_HEIGHT 10
+
 const uint8_t mouse_icon[16][11] =  {
 	{1,0,0,0,0,0,0,0,0,0,0},
 	{1,1,0,0,0,0,0,0,0,0,0},
@@ -191,7 +193,8 @@ public:
         // Background
         draw_rectangle(abs_x, abs_y, width, height, 0xFFFFFF);
         // Border
-        draw_window_border(abs_x, abs_y, width, height, 4, 0x000000, 0xC0C0C0);
+        draw_window_border(abs_x, abs_y - TITLE_BAR_HEIGHT, width, height + TITLE_BAR_HEIGHT + 2, 2, 0x357EC7, 0x357EC7);
+        draw_rectangle(abs_x, abs_y - TITLE_BAR_HEIGHT, width, TITLE_BAR_HEIGHT, 0x00);
 
         for (auto& child : children) {
             child->draw();
