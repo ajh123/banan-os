@@ -82,6 +82,9 @@ case $1 in
 	qemu)
 		run_qemu -serial stdio $QEMU_ACCEL
 		;;
+	qemu-noaccel)
+		run_qemu -serial stdio
+		;;
 	qemu-nographic)
 		run_qemu -nographic $QEMU_ACCEL
 		;;
